@@ -5,9 +5,9 @@ Production ready golang REST API.
 ## Architecture
 
 ```
-      +-------------+        +-------------+        +-------------+
------>|    HTTP     | -----> |   Service   | -----> | Repository  |
-      +-------------+        +-------------+        +-------------+
+    +-------------+      +-------------+      +-------------+
+--->|    HTTP     | ---> |   Service   | ---> | Repository  | ---> DB(postgres)
+    +-------------+      +-------------+      +-------------+
 ```
 
 1. **HTTP (Hypertext Transfer Protocol)**
