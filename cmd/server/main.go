@@ -20,9 +20,15 @@ func Run() error {
 	}
 	if err := db.Ping(context.Background()); err != nil {
 		return err
-	} else {
-		log.Println("Successful db connection")
 	}
+
+	if err := db.MigrateDB(); err != nil {
+		log.Println("failed to migrate database")
+		return err
+	}
+
+	log.Println("Successful db connection")
+
 	return nil
 }
 
