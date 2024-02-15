@@ -10,9 +10,12 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"github.com/roblesdotdev/go-rest-api/internal/comment"
 )
 
-type CommentService interface{}
+type CommentService interface {
+	CreateComment(context.Context, comment.Comment) (comment.Comment, error)
+}
 
 type Handler struct {
 	Router  *mux.Router
@@ -39,6 +42,8 @@ func (h *Handler) mapRoutes() {
 	h.Router.HandleFunc("/hello", func(w http.ResponseWriter, _ *http.Request) {
 		fmt.Fprintf(w, "Hello, World")
 	})
+
+	h.Router.HandleFunc("/api/v1/comment", h.PostComment).Methods("POST")
 }
 
 func (h *Handler) Serve() error {
