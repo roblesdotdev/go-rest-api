@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/roblesdotdev/go-rest-api/internal/comment"
 )
 
@@ -21,6 +22,25 @@ func (h *Handler) PostComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.NewEncoder(w).Encode(cmt); err != nil {
+		panic(err)
+	}
+}
+
+func (h *Handler) GetComment(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	if id == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	cmt, err := h.Service.GetComment(r.Context(), id)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if err = json.NewEncoder(w).Encode(cmt); err != nil {
 		panic(err)
 	}
 }
