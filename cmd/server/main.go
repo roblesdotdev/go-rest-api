@@ -4,7 +4,9 @@ import (
 	"context"
 	"log"
 
+	"github.com/roblesdotdev/go-rest-api/internal/comment"
 	"github.com/roblesdotdev/go-rest-api/internal/db"
+	transportHttp "github.com/roblesdotdev/go-rest-api/internal/transport/http"
 )
 
 // Run - is going to be responsible for
@@ -28,6 +30,12 @@ func Run() error {
 	}
 
 	log.Println("Successful db connection")
+
+	cmtService := comment.NewService(db)
+	httpHandler := transportHttp.NewHandler(cmtService)
+	if err := httpHandler.Serve(); err != nil {
+		return err
+	}
 
 	return nil
 }
