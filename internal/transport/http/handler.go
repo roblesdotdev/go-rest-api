@@ -17,6 +17,7 @@ type CommentService interface {
 	CreateComment(context.Context, comment.Comment) (comment.Comment, error)
 	GetComment(context.Context, string) (comment.Comment, error)
 	UpdateComment(context.Context, string, comment.Comment) (comment.Comment, error)
+	DeleteComment(context.Context, string) error
 }
 
 type Handler struct {
@@ -48,6 +49,7 @@ func (h *Handler) mapRoutes() {
 	h.Router.HandleFunc("/api/v1/comment", h.PostComment).Methods("POST")
 	h.Router.HandleFunc("/api/v1/comment/{id}", h.GetComment).Methods("GET")
 	h.Router.HandleFunc("/api/v1/comment/{id}", h.UpdateComment).Methods("PUT")
+	h.Router.HandleFunc("/api/v1/comment/{id}", h.DeleteComment).Methods("DELETE")
 }
 
 func (h *Handler) Serve() error {

@@ -9,6 +9,10 @@ import (
 	"github.com/roblesdotdev/go-rest-api/internal/comment"
 )
 
+type Response struct {
+	Message string
+}
+
 func (h *Handler) PostComment(w http.ResponseWriter, r *http.Request) {
 	var cmt comment.Comment
 	if err := json.NewDecoder(r.Body).Decode(&cmt); err != nil {
@@ -65,6 +69,25 @@ func (h *Handler) UpdateComment(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if err := json.NewEncoder(w).Encode(cmt); err != nil {
+		panic(err)
+	}
+}
+
+func (h *Handler) DeleteComment(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	if id == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err := h.Service.DeleteComment(r.Context(), id)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if err := json.NewEncoder(w).Encode(Response{Message: "Deleted successfully"}); err != nil {
 		panic(err)
 	}
 }
