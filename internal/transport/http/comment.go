@@ -44,3 +44,27 @@ func (h *Handler) GetComment(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 }
+
+func (h *Handler) UpdateComment(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	if id == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	var cmt comment.Comment
+	if err := json.NewDecoder(r.Body).Decode(&cmt); err != nil {
+		return
+	}
+
+	cmt, err := h.Service.UpdateComment(r.Context(), id, cmt)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if err := json.NewEncoder(w).Encode(cmt); err != nil {
+		panic(err)
+	}
+}
