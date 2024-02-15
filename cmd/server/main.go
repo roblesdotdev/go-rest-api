@@ -2,10 +2,8 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 
-	"github.com/roblesdotdev/go-rest-api/internal/comment"
 	"github.com/roblesdotdev/go-rest-api/internal/db"
 )
 
@@ -30,12 +28,6 @@ func Run() error {
 	}
 
 	log.Println("Successful db connection")
-	cmt := comment.Comment{
-		Slug:   "new-comment",
-		Body:   "Hello, World",
-		Author: "Robles AR",
-	}
-	fmt.Println(db.CreateComment(context.Background(), cmt))
 
 	return nil
 }

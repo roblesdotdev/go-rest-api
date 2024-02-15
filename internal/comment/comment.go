@@ -25,6 +25,7 @@ type Comment struct {
 type Store interface {
 	GetComment(context.Context, string) (Comment, error)
 	CreateComment(context.Context, Comment) (Comment, error)
+	DeleteComment(context.Context, string) error
 }
 
 // Service - is the struct on which all our
@@ -56,7 +57,11 @@ func (s *Service) UpdateComment(ctx context.Context, cmt Comment) error {
 }
 
 func (s *Service) DeleteComment(ctx context.Context, id string) error {
-	return ErrorNotImplemented
+	err := s.Store.DeleteComment(ctx, id)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *Service) CreateComment(ctx context.Context, cmt Comment) (Comment, error) {
