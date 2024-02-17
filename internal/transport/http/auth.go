@@ -3,6 +3,7 @@ package http
 import (
 	"errors"
 	"net/http"
+	"os"
 	"strings"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -30,7 +31,7 @@ func JWTAuth(next func(w http.ResponseWriter, r *http.Request)) func(http.Respon
 }
 
 func validateToken(secretToken string) bool {
-	mySigningKey := []byte("mysuppersecret")
+	mySigningKey := []byte(os.Getenv("SECRET_KEY"))
 	token, err := jwt.Parse(secretToken, func(token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("could not validate auth token")
